@@ -21,6 +21,7 @@ namespace SzintaxisFelismero
     public partial class MainWindow : Window
     {
         enum allapotok { KEZDO, KVANTOR, PREDIKATUM_BETU, KOV_ARG, PREDIKATUM, TERM, ARGUMENTUM }
+        
 
         List<Predikatum> predikatumok = new List<Predikatum>();
         List<Fuggveny> fuggvenyek = new List<Fuggveny>();
@@ -31,6 +32,8 @@ namespace SzintaxisFelismero
         {
             InitializeComponent();
         }
+
+        
 
         private bool joFormula(string s)
         {
@@ -208,9 +211,9 @@ namespace SzintaxisFelismero
         private void inditButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine(joFormula(inputBox.Text));
-
-
-
+            String s = inputBox.Text;
+            Tree t = new Tree(s, null);
+            t.bejar();
         }
     }
     
