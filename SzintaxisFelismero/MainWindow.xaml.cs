@@ -34,7 +34,7 @@ namespace SzintaxisFelismero
         }
 
         
-
+        
         private bool joFormula(string s)
         {
             allapotok allapot = allapotok.KEZDO;
@@ -58,6 +58,7 @@ namespace SzintaxisFelismero
                                 if (f.szimb.Equals(s[i]))
                                 {
                                     Console.WriteLine("predikátum is és függvény is!");
+                                    eredmenyLabel.Content = "A(z) " + s[i] + " jel egyszer függvény máskor predikátumszimbólumként szerepel!";
                                     return false;
                                 }
                             }
@@ -79,6 +80,7 @@ namespace SzintaxisFelismero
                                     if (p.parameterek > 0)
                                     {
                                         Console.WriteLine("hibás paraméterszám!");
+                                        eredmenyLabel.Content = "A(z) " + s[i] + " predikátum hibás paraméterszámmal szerepel!";
                                         return false;
                                     }
                                     p.parameterek = -1;
@@ -103,7 +105,7 @@ namespace SzintaxisFelismero
 
                     case allapotok.KOV_ARG:
                         if (s[i] >= 65 && s[i] <= 90 && s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; }
-                        else if (s[i] >= 65 && s[i] <= 90) { Console.WriteLine("Egy fgv. szimbólumnak minimum 1 araméterrel rendelkeznie kell!!"); return false; }
+                        else if (s[i] >= 65 && s[i] <= 90) { Console.WriteLine("Egy fgv. szimbólumnak minimum 1 araméterrel rendelkeznie kell!!"); eredmenyLabel.Content = "A(z)" + s[i] + "függvényszimbólumnak nincs paraéter megadva!"; return false; }
                         else if (s[i] >= 97 && s[i] <= 122) { allapot = allapotok.ARGUMENTUM; }
                         else return false;
                         if ((allapot == allapotok.PREDIKATUM || allapot == allapotok.ARGUMENTUM) && s[i] >= 65 && s[i] <= 90)
@@ -113,6 +115,7 @@ namespace SzintaxisFelismero
                                 if (p.szimb.Equals(s[i]))
                                 {
                                     Console.WriteLine("predikátum is és függvény is!");
+                                    eredmenyLabel.Content = "A(z) " + s[i] + " jel egyszer függvény máskor predikátumszimbólumként szerepel!";
                                     return false;
                                 }
                             }
@@ -138,6 +141,7 @@ namespace SzintaxisFelismero
                                 if (p.szimb.Equals(s[i]))
                                 {
                                     Console.WriteLine("predikátum is és függvény is!");
+                                    eredmenyLabel.Content = "A(z) " + s[i] + " jel egyszer függvény máskor predikátumszimbólumként szerepel!";
                                     return false;
                                 }
                             }
@@ -176,7 +180,8 @@ namespace SzintaxisFelismero
 
                             if (argumentum.Peek() != a && a != 0)
                             {
-                                Console.WriteLine("\nHibás paraméterszám:");
+                                Console.WriteLine("Hibás paraméterszám:");
+                                eredmenyLabel.Content = "Hibás paraméterszám!";
                                 return false;
                             }
                             char c = szimbolum.Pop();
@@ -210,10 +215,12 @@ namespace SzintaxisFelismero
 
         private void inditButton_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(joFormula(inputBox.Text));
+            //Console.WriteLine(joFormula(inputBox.Text));
             String s = inputBox.Text;
             Tree t = new Tree(s, null);
             t.bejar();
+            if (joFormula(inputBox.Text))
+                eredmenyLabel.Content = "A formula helyes!";
         }
     }
     
