@@ -220,7 +220,11 @@ namespace SzintaxisFelismero
             Tree t = new Tree(s, null);
             t.bejar();
             if (joFormula(inputBox.Text))
-                eredmenyLabel.Content = "A formula helyes!";
+            {
+                if (inputBox.Text.Contains("J") || inputBox.Text.Contains("V"))
+                    eredmenyLabel.Content = "Helyes elsőrendű formula!";
+                else eredmenyLabel.Content = "Helyes ítéletlogikai formula!";
+            }
         }
     }
     
