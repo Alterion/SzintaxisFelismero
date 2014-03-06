@@ -91,7 +91,11 @@ namespace SzintaxisFelismero
 
                     case allapotok.KVANTOR:
                         if (s[i] >= 97 && s[i] <= 122) { allapot = allapotok.KEZDO; }
-                        else return false;
+                        else
+                        {
+                            eredmenyLabel.Content = "A kvantor után csak változó állhat!";
+                            return false;
+                        }
                         break;
 
                     case allapotok.PREDIKATUM_BETU:
@@ -131,8 +135,8 @@ namespace SzintaxisFelismero
                         break;
 
                     case allapotok.TERM:
-                        if (s[i] >= 97 & s[i] <= 122) { allapot = allapotok.ARGUMENTUM; }
-                        else if (s[i] >= 65 & s[i] <= 90 & s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; }
+                        if (s[i] >= 97 && s[i] <= 122) { allapot = allapotok.ARGUMENTUM; }
+                        else if (s[i] >= 65 && s[i] <= 90 && s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; }
                         else return false;
                         if (allapot == allapotok.PREDIKATUM)
                         {
