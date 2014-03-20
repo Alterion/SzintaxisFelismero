@@ -37,6 +37,11 @@ namespace SzintaxisFelismero
         
         private bool joFormula(string s)
         {
+            predikatumok = new List<Predikatum>();
+            fuggvenyek = new List<Fuggveny>();
+            szimbolum = new Stack<char>();
+            argumentum = new Stack<int>();
+
             allapotok allapot = allapotok.KEZDO;
             int zaro = 0, z2 = 0;
 
@@ -48,16 +53,16 @@ namespace SzintaxisFelismero
                         if (s[i] == 'V' || s[i] == 'J') { allapot = allapotok.KVANTOR; }
                         else if (s[i] == '!') { allapot = allapotok.KEZDO; }
                         else if (s[i] == '(') { z2++; }
-                        else if (s[i] >= 65 && s[i] <= 90 && s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; }
+                        else if (i + 1 <= s.Length - 1) { if (s[i] >= 65 && s[i] <= 90 && s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; } }
                         else if (s[i] >= 65 && s[i] <= 90) { allapot = allapotok.PREDIKATUM_BETU; }
-                        else return false;
+                        else { eredmenyLabel.Content = "Hibás formula!"; return false; }
                         if (allapot == allapotok.PREDIKATUM || allapot == allapotok.PREDIKATUM_BETU)
                         {
                             foreach (Fuggveny f in fuggvenyek)
                             {
                                 if (f.szimb.Equals(s[i]))
                                 {
-                                    Console.WriteLine("predikátum is és függvény is!");
+                                    //Console.WriteLine("predikátum is és függvény is!");
                                     eredmenyLabel.Content = "A(z) " + s[i] + " jel egyszer függvény máskor predikátumszimbólumként szerepel!";
                                     return false;
                                 }
@@ -79,7 +84,7 @@ namespace SzintaxisFelismero
                                 {
                                     if (p.parameterek > 0)
                                     {
-                                        Console.WriteLine("hibás paraméterszám!");
+                                        //Console.WriteLine("hibás paraméterszám!");
                                         eredmenyLabel.Content = "A(z) " + s[i] + " predikátum hibás paraméterszámmal szerepel!";
                                         return false;
                                     }
@@ -90,7 +95,7 @@ namespace SzintaxisFelismero
                         break;
 
                     case allapotok.KVANTOR:
-                        if (s[i] >= 97 && s[i] <= 122) { allapot = allapotok.KEZDO; }
+                        if (s[i] >= 97 && s[i] <= 122 && s[i] != 'c' && s[i] != 'd' && s[i] != 'e') { allapot = allapotok.KEZDO; }
                         else
                         {
                             eredmenyLabel.Content = "A kvantor után csak változó állhat!";
@@ -109,7 +114,7 @@ namespace SzintaxisFelismero
 
                     case allapotok.KOV_ARG:
                         if (s[i] >= 65 && s[i] <= 90 && s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; }
-                        else if (s[i] >= 65 && s[i] <= 90) { Console.WriteLine("Egy fgv. szimbólumnak minimum 1 araméterrel rendelkeznie kell!!"); eredmenyLabel.Content = "A(z)" + s[i] + "függvényszimbólumnak nincs paraéter megadva!"; return false; }
+                        else if (s[i] >= 65 && s[i] <= 90) { Console.WriteLine("Egy fgv. szimbólumnak minimum egy araméterrel rendelkeznie kell!!"); eredmenyLabel.Content = "A(z)" + s[i] + "függvényszimbólumnak nincs paraéter megadva!"; return false; }
                         else if (s[i] >= 97 && s[i] <= 122) { allapot = allapotok.ARGUMENTUM; }
                         else return false;
                         if ((allapot == allapotok.PREDIKATUM || allapot == allapotok.ARGUMENTUM) && s[i] >= 65 && s[i] <= 90)
@@ -118,7 +123,7 @@ namespace SzintaxisFelismero
                             {
                                 if (p.szimb.Equals(s[i]))
                                 {
-                                    Console.WriteLine("predikátum is és függvény is!");
+                                    //Console.WriteLine("predikátum is és függvény is!");
                                     eredmenyLabel.Content = "A(z) " + s[i] + " jel egyszer függvény máskor predikátumszimbólumként szerepel!";
                                     return false;
                                 }
@@ -144,7 +149,7 @@ namespace SzintaxisFelismero
                             {
                                 if (p.szimb.Equals(s[i]))
                                 {
-                                    Console.WriteLine("predikátum is és függvény is!");
+                                    //Console.WriteLine("predikátum is és függvény is!");
                                     eredmenyLabel.Content = "A(z) " + s[i] + " jel egyszer függvény máskor predikátumszimbólumként szerepel!";
                                     return false;
                                 }
@@ -184,7 +189,7 @@ namespace SzintaxisFelismero
 
                             if (argumentum.Peek() != a && a != 0)
                             {
-                                Console.WriteLine("Hibás paraméterszám:");
+                                //Console.WriteLine("Hibás paraméterszám:");
                                 eredmenyLabel.Content = "Hibás paraméterszám!";
                                 return false;
                             }
@@ -219,16 +224,17 @@ namespace SzintaxisFelismero
 
         private void inditButton_Click(object sender, RoutedEventArgs e)
         {
-            //Console.WriteLine(joFormula(inputBox.Text));
             String s = inputBox.Text;
-            Tree t = new Tree(s, null);
-            t.bejar();
+            Tree t = new Tree(s, null);           
             if (joFormula(inputBox.Text))
             {
-                if (inputBox.Text.Contains("J") || inputBox.Text.Contains("V"))
+                /*if (inputBox.Text.Contains("J") || inputBox.Text.Contains("V"))
                     eredmenyLabel.Content = "Helyes elsőrendű formula!";
-                else eredmenyLabel.Content = "Helyes ítéletlogikai formula!";
+                else eredmenyLabel.Content = "Helyes ítéletlogikai formula!";*/
+                t.bejar();
+                eredmenyLabel.Content = "Helyes formula!";
             }
+            else eredmenyLabel.Content = "Hibás formula!";
         }
     }
     
