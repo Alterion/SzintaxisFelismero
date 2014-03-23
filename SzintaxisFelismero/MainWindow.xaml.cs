@@ -213,6 +213,7 @@ namespace SzintaxisFelismero
 
                     default: return false;
                 }
+                Console.WriteLine(allapot);
             }
 
             if (z2 == 0 && allapot == allapotok.PREDIKATUM_BETU)
@@ -224,6 +225,7 @@ namespace SzintaxisFelismero
 
         private void inditButton_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("---------------------------------------");
             String s = inputBox.Text;
             Tree t = new Tree(s, null);           
             if (joFormula(inputBox.Text))
