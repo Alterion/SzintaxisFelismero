@@ -10,12 +10,14 @@ namespace SzintaxisFelismero
     {
         enum jelek { EKVIVALENCIA, IMPLIKACIO, KONJUNKCIO, DISZJUNKCIO, NEGACIO, EXISTENCIALIS, UNIVERZALIS, KEZDO }
 
-        Tree bal, jobb, szulo;
-        String kif;
+        public Tree bal, jobb, szulo;
+        public String kif;
 
         public void bejar()
         {
             Console.WriteLine("Node:" + kif);
+            if(szulo != null)
+                Console.WriteLine("Szülője " + szulo.kif);
             if (bal != null)
             {
                 Console.WriteLine("bal");
@@ -26,6 +28,85 @@ namespace SzintaxisFelismero
                 Console.WriteLine("jobb");
                 jobb.bejar();
             }
+        }
+
+        //ekvivalencia eltávolítása
+        public void ekvivalencia_eltav()
+        {
+            if (this.kif.Equals("="))
+            {
+                Tree t = new Tree(">", this);
+                Tree t1 = new Tree(">", this);
+                this.kif = "&";
+                t.bal = this.bal;
+                t.jobb = this.jobb;
+                t1.bal = this.jobb;
+                t1.jobb = this.bal;
+                this.bal = t;
+                this.jobb = t1;
+            }
+            if (this.bal != null) this.bal.ekvivalencia_eltav();
+            if (this.jobb != null) this.jobb.ekvivalencia_eltav();             
+        }
+
+        //implikacio eltávolítása
+        public void implikacio_eltav()
+        {
+            if(this.kif.Equals(">"))
+            {
+                Tree t;
+                if(this.szulo != null)
+                {
+                    if(this.szulo.kif.Equals("!"))
+                    {
+                        this.szulo.kif = "&";
+                        this.szulo.jobb = new Tree("!", this.szulo);
+                        this.jobb.szulo = this.szulo.jobb;
+                        this.szulo.jobb.bal = this.jobb;
+                        this.jobb = null;
+                        this.bal.szulo = this.szulo;
+                        this.szulo.bal = this.bal;
+                    }
+                    else
+                    {
+                        this.kif = "|";
+                        t = new Tree("!", this);
+                        t.bal = this.bal;
+                        this.bal.szulo = t;
+                        this.bal = t;
+                    }
+                }
+                else
+                {
+                    this.kif = "|";
+                    t = new Tree("!", this);
+                    t.bal = this.bal;
+                    this.bal.szulo = t;
+                    this.bal = t;
+                }
+
+            }
+            if (this.bal != null) this.bal.implikacio_eltav();
+            if (this.jobb != null) this.jobb.implikacio_eltav();
+        }
+
+        public void KNF()
+        {
+            this.ekvivalencia_eltav();
+        }
+
+        public Tree masol(int i)
+        {
+            Tree t;
+            if(i == 0)
+                t = new Tree("",null);
+            else t = new Tree("",this);
+            t.kif = this.kif;
+            if (bal != null)
+                t.bal = this.bal.masol(1);
+            if (jobb != null)
+                t.jobb = this.jobb.masol(1);
+            return t;
         }
 
         private String zarojelLeszed(String s)
@@ -59,9 +140,8 @@ namespace SzintaxisFelismero
 
         public Tree(String s, Tree parent)
         {
-            //Console.WriteLine(s);
-            s = zarojelLeszed(s);
-            Console.WriteLine(s);
+            if(s.Length != 0)
+                s = zarojelLeszed(s);
             if (s.Length == 1)
             {
                 kif = s;
@@ -110,8 +190,9 @@ namespace SzintaxisFelismero
                     {
                         if (jel == jelek.NEGACIO)
                         {
-                            kif = "!";
+                            kif = s.Substring(0, 1);
                             bal = new Tree(s.Substring(1, s.Length - 1), this);
+                            bal.szulo = this;
                             jobb = null;
                         }
                         else

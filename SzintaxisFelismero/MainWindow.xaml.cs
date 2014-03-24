@@ -114,7 +114,7 @@ namespace SzintaxisFelismero
 
                     case allapotok.KOV_ARG:
                         if (s[i] >= 65 && s[i] <= 90 && s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; }
-                        else if (s[i] >= 65 && s[i] <= 90) { Console.WriteLine("Egy fgv. szimbólumnak minimum egy araméterrel rendelkeznie kell!!"); eredmenyLabel.Content = "A(z)" + s[i] + "függvényszimbólumnak nincs paraéter megadva!"; return false; }
+                        else if (s[i] >= 65 && s[i] <= 90) { /*Console.WriteLine("Egy fgv. szimbólumnak minimum egy araméterrel rendelkeznie kell!!");*/ eredmenyLabel.Content = "A(z)" + s[i] + "függvényszimbólumnak nincs paraéter megadva!"; return false; }
                         else if (s[i] >= 97 && s[i] <= 122) { allapot = allapotok.ARGUMENTUM; }
                         else return false;
                         if ((allapot == allapotok.PREDIKATUM || allapot == allapotok.ARGUMENTUM) && s[i] >= 65 && s[i] <= 90)
@@ -230,11 +230,12 @@ namespace SzintaxisFelismero
             Tree t = new Tree(s, null);           
             if (joFormula(inputBox.Text))
             {
-                /*if (inputBox.Text.Contains("J") || inputBox.Text.Contains("V"))
-                    eredmenyLabel.Content = "Helyes elsőrendű formula!";
-                else eredmenyLabel.Content = "Helyes ítéletlogikai formula!";*/
+                //Console.WriteLine(t.bal.szulo.kif);
+                //t.ekvivalencia_eltav();
+                t.implikacio_eltav();
                 t.bejar();
                 eredmenyLabel.Content = "Helyes formula!";
+                
             }
             else eredmenyLabel.Content = "Hibás formula!";
         }
