@@ -53,7 +53,7 @@ namespace SzintaxisFelismero
                         if (s[i] == 'V' || s[i] == 'J') { allapot = allapotok.KVANTOR; }
                         else if (s[i] == '!') { allapot = allapotok.KEZDO; }
                         else if (s[i] == '(') { z2++; }
-                        else if (i + 1 <= s.Length - 1) { if (s[i] >= 65 && s[i] <= 90 && s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; } }
+                        else /*if (i + 1 <= s.Length - 1) { */if (s[i] >= 65 && s[i] <= 90 && s[i + 1] == '(') { allapot = allapotok.PREDIKATUM; /*}*/ }
                         else if (s[i] >= 65 && s[i] <= 90) { allapot = allapotok.PREDIKATUM_BETU; }
                         else { eredmenyLabel.Content = "Hibás formula!"; return false; }
                         if (allapot == allapotok.PREDIKATUM || allapot == allapotok.PREDIKATUM_BETU)
