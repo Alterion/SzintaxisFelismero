@@ -90,6 +90,65 @@ namespace SzintaxisFelismero
             if (this.jobb != null) this.jobb.implikacio_eltav();
         }
 
+        public void negacio_bevitel()
+        {
+            if(this.szulo == null && this.kif.Equals("!") && this.bal.kif.Equals("!"))
+            {
+                this.kif = this.bal.bal.kif;
+                this.bal = this.bal.bal.bal;
+                this.jobb = this.bal.bal.jobb;
+            }
+
+            if(this.kif.Equals("!"))
+            {
+                if(this.bal.kif.Equals("&"))
+                {
+                    this.kif = "|";
+                    this.bal.kif = "!";
+                    this.jobb = new Tree("!", this);
+                    this.jobb.bal = this.bal.jobb;
+                    this.bal.jobb = null;
+                }
+            }
+
+            if(this.kif.Equals("!"))
+            {
+                if(this.bal.kif.Equals("|"))
+                {
+                    this.kif = "&";
+                    this.bal.kif = "!";
+                    this.jobb = new Tree("!", this);
+                    this.jobb.bal = this.bal.jobb;
+                    this.bal.jobb = null;
+                }
+            }
+
+            if (this.bal != null)
+            {
+                if (this.bal.kif.Equals("!"))
+                {
+                    if (this.bal.bal.kif.Equals("!"))
+                    {
+                        this.bal = this.bal.bal.bal;
+                        this.bal.szulo = this;
+                    }
+                }
+            }
+            if(this.jobb != null)
+            {
+                if(this.jobb.kif.Equals("!"))
+                {
+                    if(this.jobb.bal.kif.Equals("!"))
+                    {
+                        this.jobb = this.jobb.bal.bal;
+                        this.jobb.szulo = this;
+                    }
+                }
+            }
+            if (this.bal != null) this.bal.negacio_bevitel();
+            if (this.jobb != null) this.jobb.negacio_bevitel();
+        }
+
         public void KNF()
         {
             this.ekvivalencia_eltav();
