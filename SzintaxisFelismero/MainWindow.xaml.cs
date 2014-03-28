@@ -231,10 +231,11 @@ namespace SzintaxisFelismero
             if (joFormula(inputBox.Text))
             {
                 //Console.WriteLine(t.bal.szulo.kif);
-                //t.ekvivalencia_eltav();
-                //t.implikacio_eltav();
+                t.ekvivalencia_eltav();
+                t.implikacio_eltav();
                 t.negacio_bevitel();
                 t.bejar();
+                Console.WriteLine();
                 eredmenyLabel.Content = "Helyes formula!";
                 
             }

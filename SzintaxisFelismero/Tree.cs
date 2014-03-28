@@ -12,22 +12,33 @@ namespace SzintaxisFelismero
 
         public Tree bal, jobb, szulo;
         public String kif;
+        //public String sz;
 
         public void bejar()
         {
-            Console.WriteLine("Node:" + kif);
+            int x = 0;
+            if(kif.Equals("|") || kif.Equals("&") || kif.Equals("!") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) Console.Write("(");
+            if (this.kif.Equals("!"))
+            {
+                Console.Write(this.kif);
+                x = 1;
+            }
+            /*Console.WriteLine("Node:" + kif);
             if(szulo != null)
-                Console.WriteLine("Szülője " + szulo.kif);
+                Console.WriteLine("Szülője " + szulo.kif);*/
             if (bal != null)
             {
-                Console.WriteLine("bal");
+                //Console.WriteLine("bal");
                 bal.bejar();
             }
+            if(x != 1) Console.Write(kif);
             if (jobb != null)
             {
-                Console.WriteLine("jobb");
+                //Console.WriteLine("jobb");
                 jobb.bejar();
             }
+            if (kif.Equals("|") || kif.Equals("&") || kif.Equals("!") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) Console.Write(")");
+            
         }
 
         //ekvivalencia eltávolítása
@@ -199,6 +210,7 @@ namespace SzintaxisFelismero
 
         public Tree(String s, Tree parent)
         {
+            //this.sz = "";
             if(s.Length != 0)
                 s = zarojelLeszed(s);
             if (s.Length == 1)
