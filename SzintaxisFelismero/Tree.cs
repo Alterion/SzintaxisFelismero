@@ -17,7 +17,7 @@ namespace SzintaxisFelismero
         public void bejar()
         {
             int x = 0;
-            if(kif.Equals("|") || kif.Equals("&") || kif.Equals("!") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) Console.Write("(");
+            if(kif.Equals("|") || kif.Equals("&") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) Console.Write("(");
             if (this.kif.Equals("!"))
             {
                 Console.Write(this.kif);
@@ -37,7 +37,7 @@ namespace SzintaxisFelismero
                 //Console.WriteLine("jobb");
                 jobb.bejar();
             }
-            if (kif.Equals("|") || kif.Equals("&") || kif.Equals("!") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) Console.Write(")");
+            if (kif.Equals("|") || kif.Equals("&") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) Console.Write(")");
             
         }
 
@@ -160,9 +160,52 @@ namespace SzintaxisFelismero
             if (this.jobb != null) this.jobb.negacio_bevitel();
         }
 
+        public void disztribut_konjhoz()
+        {
+            if (this.kif.Equals("|") && this.jobb.kif.Equals("&"))
+            {
+                this.kif = "&";
+                Tree t = new Tree("|", this);
+                t.bal = this.bal.masol(1);
+                t.jobb = this.jobb.bal.masol(1);
+                this.jobb.kif = "|";
+                this.jobb.bal = this.bal.masol(1);
+                this.bal = t;
+            }
+            if (this.bal != null) this.bal.disztribut_konjhoz();
+            if (this.jobb != null) this.jobb.disztribut_konjhoz();
+        }
+
+        public void disztribut_diszjhoz()
+        {
+            if (this.kif.Equals("&") && this.jobb.kif.Equals("|"))
+            {
+                this.kif = "|";
+                Tree t = new Tree("&", this);
+                t.bal = this.bal.masol(1);
+                t.jobb = this.jobb.bal.masol(1);
+                this.jobb.kif = "&";
+                this.jobb.bal = this.bal.masol(1);
+                this.bal = t;
+            }
+            if (this.bal != null) this.bal.disztribut_konjhoz();
+            if (this.jobb != null) this.jobb.disztribut_konjhoz();
+        }
+
         public void KNF()
         {
             this.ekvivalencia_eltav();
+            this.implikacio_eltav();
+            this.negacio_bevitel();
+
+        }
+
+        public void DNF()
+        {
+            this.ekvivalencia_eltav();
+            this.implikacio_eltav();
+            this.negacio_bevitel();
+
         }
 
         public Tree masol(int i)

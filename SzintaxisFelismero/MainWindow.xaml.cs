@@ -234,10 +234,10 @@ namespace SzintaxisFelismero
                 t.ekvivalencia_eltav();
                 t.implikacio_eltav();
                 t.negacio_bevitel();
+                t.disztribut_konjhoz();
                 t.bejar();
                 Console.WriteLine();
-                eredmenyLabel.Content = "Helyes formula!";
-                
+                eredmenyLabel.Content = "Helyes formula!";                
             }
             else eredmenyLabel.Content = "Hibás formula!";
         }
