@@ -172,6 +172,18 @@ namespace SzintaxisFelismero
                 this.jobb.bal = this.bal.masol(1);
                 this.bal = t;
             }
+
+            if (this.kif.Equals("|") && this.bal.kif.Equals("&"))
+            {
+                this.kif = "&";
+                Tree t = new Tree("|", this);
+                t.bal = this.bal.jobb.masol(1);
+                t.jobb = this.jobb.masol(1);
+                this.bal.kif = "|";
+                this.bal.jobb = this.jobb.masol(1);
+                this.jobb = t;
+            }
+
             if (this.bal != null) this.bal.disztribut_konjhoz();
             if (this.jobb != null) this.jobb.disztribut_konjhoz();
         }
@@ -188,6 +200,18 @@ namespace SzintaxisFelismero
                 this.jobb.bal = this.bal.masol(1);
                 this.bal = t;
             }
+
+            if (this.kif.Equals("&") && this.bal.kif.Equals("|"))
+            {
+                this.kif = "|";
+                Tree t = new Tree("&", this);
+                t.bal = this.bal.jobb.masol(1);
+                t.jobb = this.jobb.masol(1);
+                this.bal.kif = "&";
+                this.bal.jobb = this.jobb.masol(1);
+                this.jobb = t;
+            }
+
             if (this.bal != null) this.bal.disztribut_konjhoz();
             if (this.jobb != null) this.jobb.disztribut_konjhoz();
         }
@@ -197,7 +221,7 @@ namespace SzintaxisFelismero
             this.ekvivalencia_eltav();
             this.implikacio_eltav();
             this.negacio_bevitel();
-
+            this.disztribut_konjhoz();
         }
 
         public void DNF()
@@ -205,9 +229,67 @@ namespace SzintaxisFelismero
             this.ekvivalencia_eltav();
             this.implikacio_eltav();
             this.negacio_bevitel();
+            this.disztribut_diszjhoz();
+        }
+
+        public Tree egyszerusit()
+        {
+            if(this.kif.Equals("&") || this.kif.Equals("|"))
+            {
+                if(this.bal.equals(this.jobb))
+                {
+                    return this.bal;
+                }
+            }
+            if(this.kif.Equals("|"))
+            {
+                if(this.bal.kif.Equals("!") && this.bal.bal.equals(this.jobb))
+                {
+                    return this.jobb;
+                }
+                if(this.jobb.kif.Equals("!") && this.jobb.bal.equals(this.bal))
+                {
+                    return this.bal;
+                }
+            }
+            if(this.kif.Equals("&"))
+            {
+                if (this.bal.kif.Equals("!") && this.bal.bal.equals(this.jobb))
+                {
+                    return null;
+                }
+                if (this.jobb.kif.Equals("!") && this.jobb.bal.equals(this.bal))
+                {
+                    return null;
+                }
+            }
+            if (this.bal != null) this.bal = this.bal.egyszerusit();
+            if (this.jobb != null) this.jobb = this.jobb.egyszerusit();
+            return this;
 
         }
 
+        public bool equals(Tree t)
+        {
+            int x = 0;
+            if (this.kif.Equals(t.kif))
+                x = 1;
+            if(x == 1 && this.bal != null && t.bal != null)
+            {
+                if (this.bal.equals(t.bal))
+                    x = 1;
+                else x = 0;
+            }
+            if(x == 1 && this.jobb != null && t.jobb != null)
+            {
+                if (this.jobb.equals(t.jobb))
+                    x = 1;
+                else x = 0;
+            }
+            if (x == 1)
+                return true;
+            else return false;
+        }
         public Tree masol(int i)
         {
             Tree t;

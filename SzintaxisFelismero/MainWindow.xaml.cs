@@ -230,12 +230,18 @@ namespace SzintaxisFelismero
             Tree t = new Tree(s, null);           
             if (joFormula(inputBox.Text))
             {
-                //Console.WriteLine(t.bal.szulo.kif);
-                t.ekvivalencia_eltav();
-                t.implikacio_eltav();
-                t.negacio_bevitel();
-                t.disztribut_konjhoz();
+                Tree t2 = t.masol(0);
+                t.KNF();
+                t2.DNF();
                 t.bejar();
+                Console.WriteLine();
+                t2.bejar();
+                Console.WriteLine();
+                t = t.egyszerusit();
+                t2 = t2.egyszerusit();
+                t.bejar();
+                Console.WriteLine();
+                t2.bejar();
                 Console.WriteLine();
                 eredmenyLabel.Content = "Helyes formula!";                
             }
