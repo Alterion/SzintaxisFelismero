@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace SzintaxisFelismero
 {
@@ -14,13 +15,14 @@ namespace SzintaxisFelismero
         public String kif;
         //public String sz;
 
-        public void bejar()
+        public void bejar(Label l)
         {
             int x = 0;
-            if(kif.Equals("|") || kif.Equals("&") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) Console.Write("(");
+            if (kif.Equals("|") || kif.Equals("&") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) { Console.Write("("); l.Content += "("; }
             if (this.kif.Equals("!"))
             {
                 Console.Write(this.kif);
+                l.Content += this.kif;
                 x = 1;
             }
             /*Console.WriteLine("Node:" + kif);
@@ -29,15 +31,15 @@ namespace SzintaxisFelismero
             if (bal != null)
             {
                 //Console.WriteLine("bal");
-                bal.bejar();
+                bal.bejar(l);
             }
-            if(x != 1) Console.Write(kif);
+            if (x != 1) { Console.Write(kif); l.Content += kif; }
             if (jobb != null)
             {
                 //Console.WriteLine("jobb");
-                jobb.bejar();
+                jobb.bejar(l);
             }
-            if (kif.Equals("|") || kif.Equals("&") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) Console.Write(")");
+            if (kif.Equals("|") || kif.Equals("&") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) { Console.Write(")"); l.Content += ")"; }
             
         }
 
@@ -221,7 +223,7 @@ namespace SzintaxisFelismero
             this.ekvivalencia_eltav();
             this.implikacio_eltav();
             this.negacio_bevitel();
-            this.disztribut_konjhoz();
+            this.disztribut_konjhoz();         
         }
 
         public void DNF()
@@ -267,6 +269,24 @@ namespace SzintaxisFelismero
             if (this.jobb != null) this.jobb = this.jobb.egyszerusit();
             return this;
 
+        }
+
+        public Tree uresAgEltavolit() 
+        {
+            if(this == null)
+            {
+                return new Tree("üres", null);
+            }
+            if (this.kif.Equals("&") || this.kif.Equals("|"))
+            {
+                if (this.bal == null)
+                    return this.jobb;
+                if (this.jobb == null)
+                    return this.bal;
+            }
+            if (this.bal != null) this.bal = this.bal.uresAgEltavolit();
+            if (this.jobb != null) this.jobb = this.jobb.uresAgEltavolit();
+            return this;
         }
 
         public bool equals(Tree t)

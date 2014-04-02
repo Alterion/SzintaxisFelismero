@@ -230,19 +230,31 @@ namespace SzintaxisFelismero
             Tree t = new Tree(s, null);           
             if (joFormula(inputBox.Text))
             {
+                knfLabel.Content = "";
+                dnfLabel.Content = "";
                 Tree t2 = t.masol(0);
                 t.KNF();
                 t2.DNF();
-                t.bejar();
+                /*t.bejar(knfLabel);
                 Console.WriteLine();
-                t2.bejar();
-                Console.WriteLine();
+                t2.bejar(dnfLabel);
+                Console.WriteLine();*/
                 t = t.egyszerusit();
                 t2 = t2.egyszerusit();
-                t.bejar();
-                Console.WriteLine();
-                t2.bejar();
-                Console.WriteLine();
+                if (t != null)
+                {
+                    t = t.uresAgEltavolit();
+                    t.bejar(knfLabel);
+                    Console.WriteLine();
+                }
+                else knfLabel.Content = "üres";
+                if (t2 != null)
+                {
+                    t2 = t2.uresAgEltavolit();
+                    t2.bejar(dnfLabel);
+                    Console.WriteLine();
+                }
+                else dnfLabel.Content = "üres";                               
                 eredmenyLabel.Content = "Helyes formula!";                
             }
             else eredmenyLabel.Content = "Hibás formula!";

@@ -1,15 +1,19 @@
 ﻿<Window x:Class="SzintaxisFelismero.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Szintaxis Felismerő" Height="402" Width="678" ResizeMode="NoResize">
+        Title="Szintaxis Felismerő" Height="511" Width="678" ResizeMode="NoResize">
     <Grid Margin="0,0,2,0">
         <TextBox x:Name="inputBox" HorizontalAlignment="Left" Height="25" Margin="28,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="299"/>
         <Button x:Name="inditButton" Content="Vizsgálj!" HorizontalAlignment="Left" Margin="136,102,0,0" VerticalAlignment="Top" Width="75" Click="inditButton_Click" />
         <Label Content="Add meg a vizsgálni kívánt formulát" HorizontalAlignment="Left" Height="27" Margin="28,20,0,0" VerticalAlignment="Top" Width="213"/>
-        <Label Content="Összekötőjelek:&#xD;&#xA;- ekvivalencia                 =&#xD;&#xA;- implikáció                    &gt;&#xD;&#xA;- konjunkció                   &amp;&#xD;&#xA;- diszjunkció                   |&#xD;&#xA;- negáció                        !&#xD;&#xA;- egzistenciális kvantor  J&#xD;&#xA;- univerzális kvantor      V&#xD;&#xA;&#xD;&#xA;" HorizontalAlignment="Left" Height="161" Margin="284,205,0,0" VerticalAlignment="Top" Width="201"/>
-        <Label Content="Predikátumszimbólumoknak és &#xA;függvényszimbólumoknak a {A...Z}/{J,V}&#xA;betűhalmaz használható.&#xD;&#xA;Konstansok a {c,d,e} halmaz elemei.&#xA;Változók  az {a...z}/{c,d,e} halmaz&#xD;&#xA;beli elemek lehetnek.&#xA;Elválasztójelek a zárjójelek: (,) és a &#xA;vessző: ," HorizontalAlignment="Left" Height="154" Margin="28,210,0,0" VerticalAlignment="Top" Width="224"/>
-        <Label Content="Eredmény:" HorizontalAlignment="Left" Height="27" Margin="28,148,0,0" VerticalAlignment="Top" Width="115"/>
-        <Label x:Name="eredmenyLabel" Content="" HorizontalAlignment="Left" Height="25" Margin="28,180,0,0" VerticalAlignment="Top" Width="630"/>
+        <Label Content="Összekötőjelek:&#xD;&#xA;- ekvivalencia                 =&#xD;&#xA;- implikáció                    &gt;&#xD;&#xA;- konjunkció                   &amp;&#xD;&#xA;- diszjunkció                   |&#xD;&#xA;- negáció                        !&#xD;&#xA;- egzistenciális kvantor  J&#xD;&#xA;- univerzális kvantor      V&#xD;&#xA;&#xD;&#xA;" HorizontalAlignment="Left" Height="161" Margin="252,140,0,0" VerticalAlignment="Top" Width="201"/>
+        <Label Content="Predikátumszimbólumoknak és &#xA;függvényszimbólumoknak a {A...Z}/{J,V}&#xA;betűhalmaz használható.&#xD;&#xA;Konstansok a {c,d,e} halmaz elemei.&#xA;Változók  az {a...z}/{c,d,e} halmaz&#xD;&#xA;beli elemek lehetnek.&#xA;Elválasztójelek a zárjójelek: (,) és a &#xA;vessző: ," HorizontalAlignment="Left" Height="154" Margin="28,140,0,0" VerticalAlignment="Top" Width="224"/>
+        <Label Content="Eredmény:" HorizontalAlignment="Left" Height="27" Margin="40,294,0,0" VerticalAlignment="Top" Width="115"/>
+        <Label x:Name="eredmenyLabel" Content="" HorizontalAlignment="Left" Height="25" Margin="40,339,0,0" VerticalAlignment="Top" Width="630"/>
+        <Label Content="KNF:" HorizontalAlignment="Left" Height="25" Margin="40,379,0,0" VerticalAlignment="Top" Width="35"/>
+        <Label Content="DNF:" HorizontalAlignment="Left" Height="25" Margin="40,420,0,0" VerticalAlignment="Top" Width="35"/>
+        <Label x:Name="knfLabel" Content="" HorizontalAlignment="Left" Height="25" Margin="83,379,0,0" VerticalAlignment="Top" Width="575"/>
+        <Label x:Name="dnfLabel" Content="" HorizontalAlignment="Left" Height="25" Margin="83,420,0,0" VerticalAlignment="Top" Width="575"/>
 
     </Grid>
 </Window>
