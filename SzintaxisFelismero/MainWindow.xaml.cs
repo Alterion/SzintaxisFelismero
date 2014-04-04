@@ -31,6 +31,8 @@ namespace SzintaxisFelismero
         public MainWindow()
         {
             InitializeComponent();
+            Tree.valtozok = new int[26];
+            Tree.valtozokNullaz();
         }
 
         
@@ -226,12 +228,14 @@ namespace SzintaxisFelismero
         private void inditButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("---------------------------------------");
+            Tree.valtozokNullaz();
             String s = inputBox.Text;
             Tree t = new Tree(s, null);           
             if (joFormula(inputBox.Text))
             {
                 knfLabel.Content = "";
                 dnfLabel.Content = "";
+                t.prenexizalo();
                 Tree t2 = t.masol(0);
                 t.KNF();
                 t2.DNF();
@@ -254,7 +258,7 @@ namespace SzintaxisFelismero
                     t2.bejar(dnfLabel);
                     Console.WriteLine();
                 }
-                else dnfLabel.Content = "üres";                               
+                else dnfLabel.Content = "üres";                            
                 eredmenyLabel.Content = "Helyes formula!";                
             }
             else eredmenyLabel.Content = "Hibás formula!";

@@ -13,13 +13,14 @@ namespace SzintaxisFelismero
 
         public Tree bal, jobb, szulo;
         public String kif;
+        public static int[] valtozok;
         //public String sz;
 
         public void bejar(Label l)
         {
             int x = 0;
             if (kif.Equals("|") || kif.Equals("&") || kif.Equals(">") || kif[0].Equals("V") || kif[0].Equals("J")) { Console.Write("("); l.Content += "("; }
-            if (this.kif.Equals("!"))
+            if (this.kif.Equals("!") || this.kif.Contains("V") || this.kif.Contains("J"))
             {
                 Console.Write(this.kif);
                 l.Content += this.kif;
@@ -310,6 +311,7 @@ namespace SzintaxisFelismero
                 return true;
             else return false;
         }
+
         public Tree masol(int i)
         {
             Tree t;
@@ -322,6 +324,64 @@ namespace SzintaxisFelismero
             if (jobb != null)
                 t.jobb = this.jobb.masol(1);
             return t;
+        }
+
+        public static void valtozokNullaz()
+        {
+            for (int i = 0; i < valtozok.Length; i++)
+                valtozok[i] = 0;
+        }
+
+        public void kotottValtKer()
+        {
+            if (this.kif.Contains("V") || this.kif.Contains("J"))
+            {
+                valtozok[this.kif[1] - 97]++;
+            }
+            if (this.bal != null) this.bal.kotottValtKer();
+            if (this.jobb != null) this.jobb.kotottValtKer();
+        }
+
+        private char nemhasznValt()
+        {
+            char c = ' ';
+            for(int i = 0; i < valtozok.Length; i++)
+            {
+                if(valtozok[i] == 0)
+                {
+                    c = Convert.ToChar(i + 97);
+                    valtozok[i]++;
+                    break;
+                }
+            }
+            return c;
+        }
+
+        private void atnevez(char mit, char mire)
+        {
+            this.kif = this.kif.Replace(mit, mire);
+            if (this.bal != null) this.bal.atnevez(mit, mire);
+            if (this.jobb != null) this.jobb.atnevez(mit, mire);
+        }
+
+        public void valtozoTisztaAlak()
+        {
+            if (this.kif.Contains("V") || this.kif.Contains("J"))
+            {
+                if (valtozok[this.kif[1] - 97] > 1)
+                {
+                    valtozok[this.kif[1] - 97]--;
+                    this.atnevez(this.kif[1], nemhasznValt());
+                }
+            }
+            if (this.bal != null) this.bal.valtozoTisztaAlak();
+            if (this.jobb != null) this.jobb.valtozoTisztaAlak();
+        }
+
+        public void prenexizalo()
+        {
+            kotottValtKer();
+            valtozoTisztaAlak();
         }
 
         private String zarojelLeszed(String s)
