@@ -329,7 +329,11 @@ namespace SzintaxisFelismero
         public static void valtozokNullaz()
         {
             for (int i = 0; i < valtozok.Length; i++)
-                valtozok[i] = 0;
+            {
+                if(i == 2 || i == 3 || i == 4)
+                    valtozok[i] = 1;
+                else valtozok[i] = 0;              
+            }
         }
 
         public void kotottValtKer()
@@ -366,6 +370,8 @@ namespace SzintaxisFelismero
 
         public void valtozoTisztaAlak()
         {
+            if (this.bal != null) this.bal.valtozoTisztaAlak();
+            if (this.jobb != null) this.jobb.valtozoTisztaAlak();
             if (this.kif.Contains("V") || this.kif.Contains("J"))
             {
                 if (valtozok[this.kif[1] - 97] > 1)
@@ -373,15 +379,67 @@ namespace SzintaxisFelismero
                     valtozok[this.kif[1] - 97]--;
                     this.atnevez(this.kif[1], nemhasznValt());
                 }
+            }           
+        }
+
+        private void demorganKvantor()
+        {
+            if (this.kif.Equals("!"))
+            {
+                if (this.bal.kif.Contains("V"))
+                {
+                    this.kif = this.bal.kif.Replace('V', 'J');
+                    this.bal.kif = "!";
+                }
             }
-            if (this.bal != null) this.bal.valtozoTisztaAlak();
-            if (this.jobb != null) this.jobb.valtozoTisztaAlak();
+            if (this.kif.Equals("!"))
+            {
+                if (this.bal.kif.Contains("J"))
+                {
+                    this.kif = this.bal.kif.Replace('J', 'V');
+                    this.bal.kif = "!";
+                }
+            }
+            this.negacio_bevitel();
+            if (this.bal != null) this.bal.demorganKvantor();
+            if (this.jobb != null) this.jobb.demorganKvantor();
+        }
+
+        private void kvantorKiemel()
+        {
+            if (this.bal != null) this.bal.kvantorKiemel();
+            if (this.jobb != null) this.jobb.kvantorKiemel();
+            if (this.kif.Equals("&"))
+            {
+                if (this.bal.kif.Contains("V") && this.jobb.kif.Contains("V"))
+                {
+                    this.kif = this.bal.kif;
+                    this.bal.kif = "&";
+                    this.bal.jobb = this.jobb.bal;
+                    this.bal.jobb.atnevez(this.jobb.kif[1], this.kif[1]);
+                    this.jobb = null;
+                }
+            }
+            if (this.kif.Equals("|"))
+            {
+                if (this.bal.kif.Contains("J") && this.jobb.kif.Contains("J"))
+                {
+                    this.kif = this.bal.kif;
+                    this.bal.kif = "|";
+                    this.bal.jobb = this.jobb.bal;
+                    this.bal.jobb.atnevez(this.jobb.kif[1], this.kif[1]);
+                    this.jobb = null;
+                }
+            }
+
         }
 
         public void prenexizalo()
         {
             kotottValtKer();
             valtozoTisztaAlak();
+            demorganKvantor();
+            kvantorKiemel();
         }
 
         private String zarojelLeszed(String s)
