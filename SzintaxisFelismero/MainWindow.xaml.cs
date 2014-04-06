@@ -228,16 +228,19 @@ namespace SzintaxisFelismero
         private void inditButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("---------------------------------------");
-            Tree.valtozokNullaz();
             String s = inputBox.Text;
             Tree t = new Tree(s, null);           
             if (joFormula(inputBox.Text))
             {
                 knfLabel.Content = "";
                 dnfLabel.Content = "";
-                t.prenexizalo();
+                while (true)
+                {
+                    if (t.prenexizalo() == 1) ;
+                    else break;
+                }
                 Tree t2 = t.masol(0);
-                t.KNF();
+                /*t.KNF();
                 t2.DNF();
                 /*t.bejar(knfLabel);
                 Console.WriteLine();

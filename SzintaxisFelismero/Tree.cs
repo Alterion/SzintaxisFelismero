@@ -405,10 +405,10 @@ namespace SzintaxisFelismero
             if (this.jobb != null) this.jobb.demorganKvantor();
         }
 
-        private void kvantorKiemel()
+        private int kvantorKiemel()
         {
-            if (this.bal != null) this.bal.kvantorKiemel();
-            if (this.jobb != null) this.jobb.kvantorKiemel();
+            int x = 0;
+            //kétoldali kiemelések
             if (this.kif.Equals("&"))
             {
                 if (this.bal.kif.Contains("V") && this.jobb.kif.Contains("V"))
@@ -418,6 +418,7 @@ namespace SzintaxisFelismero
                     this.bal.jobb = this.jobb.bal;
                     this.bal.jobb.atnevez(this.jobb.kif[1], this.kif[1]);
                     this.jobb = null;
+                    x = 1;
                 }
             }
             if (this.kif.Equals("|"))
@@ -429,17 +430,114 @@ namespace SzintaxisFelismero
                     this.bal.jobb = this.jobb.bal;
                     this.bal.jobb.atnevez(this.jobb.kif[1], this.kif[1]);
                     this.jobb = null;
+                    x = 1;
+                }
+            }
+            //egyoldali kiemelések
+            if (this.kif.Equals("&"))
+            {
+                if (this.bal.kif.Contains("V") || this.bal.kif.Contains("J"))
+                {
+                    this.kif = this.bal.kif;
+                    this.bal.kif = "&";
+                    this.bal.jobb = this.jobb;
+                    this.jobb = null;
+                    x = 1;
                 }
             }
 
+            if (this.kif.Equals("&"))
+            {
+                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
+                {
+                    this.kif = this.jobb.kif;
+                    this.jobb.kif = "&";
+                    this.jobb.jobb = this.jobb.bal;
+                    this.jobb.bal = this.bal;
+                    this.bal = this.jobb;
+                    this.jobb = null;
+                    x = 1;
+                }
+            }
+
+            if (this.kif.Equals("|"))
+            {
+                if (this.bal.kif.Contains("V") || this.bal.kif.Contains("J"))
+                {
+                    this.kif = this.bal.kif;
+                    this.bal.kif = "|";
+                    this.bal.jobb = this.jobb;
+                    this.jobb = null;
+                    x = 1;
+                }
+            }
+
+            if (this.kif.Equals("|"))
+            {
+                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
+                {
+                    this.kif = this.jobb.kif;
+                    this.jobb.kif = "|";
+                    this.jobb.jobb = this.jobb.bal;
+                    this.jobb.bal = this.bal;
+                    this.bal = this.jobb;
+                    this.jobb = null;
+                    x = 1;
+                }
+            }
+
+            if (this.kif.Equals(">"))
+            {
+                if (this.bal.kif.Contains("V"))
+                {
+                    this.kif = "J" + this.bal.kif[1];
+                    this.bal.kif = ">";
+                    this.bal.jobb = this.jobb;
+                    this.jobb = null;
+                    x = 1;
+                }
+            }
+
+            if (this.kif.Equals(">"))
+            {
+                if (this.bal.kif.Contains("J"))
+                {
+                    this.kif = "V" + this.bal.kif[1];
+                    this.bal.kif = ">";
+                    this.bal.jobb = this.jobb;
+                    this.jobb = null;
+                    x = 1;
+                }
+            }
+
+            if (this.kif.Equals(">"))
+            {
+                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
+                {
+                    this.kif = this.jobb.kif;
+                    this.jobb.kif = ">";
+                    this.jobb.jobb = this.jobb.bal;
+                    this.jobb.bal = this.bal;
+                    this.bal = this.jobb;
+                    this.jobb = null;
+                    x = 1;
+                }
+            }            
+
+            if (this.bal != null) this.bal.kvantorKiemel();
+            if (this.jobb != null) this.jobb.kvantorKiemel();
+            return x;
         }
 
-        public void prenexizalo()
+        public int prenexizalo()
         {
+            int x;
+            valtozokNullaz();
             kotottValtKer();
             valtozoTisztaAlak();
             demorganKvantor();
-            kvantorKiemel();
+            x = kvantorKiemel();
+            return x;
         }
 
         private String zarojelLeszed(String s)
