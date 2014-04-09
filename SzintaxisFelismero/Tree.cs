@@ -9,7 +9,7 @@ namespace SzintaxisFelismero
 {
     class Tree
     {
-        enum jelek { EKVIVALENCIA, IMPLIKACIO, KONJUNKCIO, DISZJUNKCIO, NEGACIO, EXISTENCIALIS, UNIVERZALIS, KEZDO }
+        enum jelek { EKVIVALENCIA, IMPLIKACIO, DISZJUNKCIO, KONJUNKCIO, NEGACIO, EXISTENCIALIS, UNIVERZALIS, KEZDO }
 
         public Tree bal, jobb, szulo;
         public String kif;
@@ -408,6 +408,8 @@ namespace SzintaxisFelismero
         private int kvantorKiemel()
         {
             int x = 0;
+            if (this.bal != null) x = this.bal.kvantorKiemel();
+            if (this.jobb != null) x = this.jobb.kvantorKiemel();
             //kétoldali kiemelések
             if (this.kif.Equals("&"))
             {
@@ -446,20 +448,6 @@ namespace SzintaxisFelismero
                 }
             }
 
-            if (this.kif.Equals("&"))
-            {
-                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
-                {
-                    this.kif = this.jobb.kif;
-                    this.jobb.kif = "&";
-                    this.jobb.jobb = this.jobb.bal;
-                    this.jobb.bal = this.bal;
-                    this.bal = this.jobb;
-                    this.jobb = null;
-                    x = 1;
-                }
-            }
-
             if (this.kif.Equals("|"))
             {
                 if (this.bal.kif.Contains("V") || this.bal.kif.Contains("J"))
@@ -467,20 +455,6 @@ namespace SzintaxisFelismero
                     this.kif = this.bal.kif;
                     this.bal.kif = "|";
                     this.bal.jobb = this.jobb;
-                    this.jobb = null;
-                    x = 1;
-                }
-            }
-
-            if (this.kif.Equals("|"))
-            {
-                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
-                {
-                    this.kif = this.jobb.kif;
-                    this.jobb.kif = "|";
-                    this.jobb.jobb = this.jobb.bal;
-                    this.jobb.bal = this.bal;
-                    this.bal = this.jobb;
                     this.jobb = null;
                     x = 1;
                 }
@@ -510,6 +484,34 @@ namespace SzintaxisFelismero
                 }
             }
 
+            if (this.kif.Equals("&"))
+            {
+                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
+                {
+                    this.kif = this.jobb.kif;
+                    this.jobb.kif = "&";
+                    this.jobb.jobb = this.jobb.bal;
+                    this.jobb.bal = this.bal;
+                    this.bal = this.jobb;
+                    this.jobb = null;
+                    x = 1;
+                }
+            }            
+
+            if (this.kif.Equals("|"))
+            {
+                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
+                {
+                    this.kif = this.jobb.kif;
+                    this.jobb.kif = "|";
+                    this.jobb.jobb = this.jobb.bal;
+                    this.jobb.bal = this.bal;
+                    this.bal = this.jobb;
+                    this.jobb = null;
+                    x = 1;
+                }
+            }            
+
             if (this.kif.Equals(">"))
             {
                 if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
@@ -522,10 +524,10 @@ namespace SzintaxisFelismero
                     this.jobb = null;
                     x = 1;
                 }
-            }            
+            }
 
-            if (this.bal != null) this.bal.kvantorKiemel();
-            if (this.jobb != null) this.jobb.kvantorKiemel();
+            this.bejar(new Label());
+            Console.WriteLine();
             return x;
         }
 
@@ -536,6 +538,8 @@ namespace SzintaxisFelismero
             kotottValtKer();
             valtozoTisztaAlak();
             demorganKvantor();
+            this.bejar(new Label());
+            Console.WriteLine();
             x = kvantorKiemel();
             return x;
         }
