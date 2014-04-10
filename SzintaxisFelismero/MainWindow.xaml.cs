@@ -234,11 +234,7 @@ namespace SzintaxisFelismero
             {
                 knfLabel.Content = "";
                 dnfLabel.Content = "";
-                while (true)
-                {
-                    if (t.prenexizalo() == 1) ;
-                    else break;
-                }
+                t.prenexizalo();
                 Tree t2 = t.masol(0);
                 /*t.KNF();
                 t2.DNF();

@@ -405,143 +405,201 @@ namespace SzintaxisFelismero
             if (this.jobb != null) this.jobb.demorganKvantor();
         }
 
-        private int kvantorKiemel()
+        private void kvantorKiemel()
         {
-            int x = 0;
-            if (this.bal != null) x = this.bal.kvantorKiemel();
-            if (this.jobb != null) x = this.jobb.kvantorKiemel();
-            //kétoldali kiemelések
-            if (this.kif.Equals("&"))
+            int x = 1;
+            if (this.bal != null) this.bal.kvantorKiemel();
+            if (this.jobb != null) this.jobb.kvantorKiemel();
+            while (x == 1)
             {
-                if (this.bal.kif.Contains("V") && this.jobb.kif.Contains("V"))
+                x = 0;
+
+                //kétoldali kiemelések
+                if (this.kif.Equals("&"))
                 {
-                    this.kif = this.bal.kif;
-                    this.bal.kif = "&";
-                    this.bal.jobb = this.jobb.bal;
-                    this.bal.jobb.atnevez(this.jobb.kif[1], this.kif[1]);
-                    this.jobb = null;
-                    x = 1;
+                    if (this.bal.kif.Contains("V") && this.jobb.kif.Contains("V"))
+                    {
+                        this.kif = this.bal.kif;
+                        this.bal.kif = "&";
+                        this.bal.jobb = this.jobb.bal;
+                        this.bal.jobb.atnevez(this.jobb.kif[1], this.kif[1]);
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
                 }
-            }
-            if (this.kif.Equals("|"))
-            {
-                if (this.bal.kif.Contains("J") && this.jobb.kif.Contains("J"))
+                if (this.kif.Equals("|"))
                 {
-                    this.kif = this.bal.kif;
-                    this.bal.kif = "|";
-                    this.bal.jobb = this.jobb.bal;
-                    this.bal.jobb.atnevez(this.jobb.kif[1], this.kif[1]);
-                    this.jobb = null;
-                    x = 1;
+                    if (this.bal.kif.Contains("J") && this.jobb.kif.Contains("J"))
+                    {
+                        this.kif = this.bal.kif;
+                        this.bal.kif = "|";
+                        this.bal.jobb = this.jobb.bal;
+                        this.bal.jobb.atnevez(this.jobb.kif[1], this.kif[1]);
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
                 }
-            }
-            //egyoldali kiemelések
-            if (this.kif.Equals("&"))
-            {
-                if (this.bal.kif.Contains("V") || this.bal.kif.Contains("J"))
+
+                //egyoldali kiemelések
+                if (this.kif.Equals("&"))
                 {
-                    this.kif = this.bal.kif;
-                    this.bal.kif = "&";
-                    this.bal.jobb = this.jobb;
-                    this.jobb = null;
-                    x = 1;
+                    if (this.bal.kif.Contains("J"))
+                    {
+                        this.kif = this.bal.kif;
+                        this.bal.kif = "&";
+                        this.bal.jobb = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                    if (this.jobb.kif.Contains("J"))
+                    {
+                        this.kif = this.jobb.kif;
+                        this.jobb.kif = "&";
+                        this.jobb.jobb = this.jobb.bal;
+                        this.jobb.bal = this.bal;
+                        this.bal = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                    if(this.bal.kif.Contains("V"))
+                    {
+                        this.kif = this.bal.kif;
+                        this.bal.kif = "&";
+                        this.bal.jobb = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                    if(this.jobb.kif.Contains("V"))
+                    {
+                        this.kif = this.jobb.kif;
+                        this.jobb.kif = "&";
+                        this.jobb.jobb = this.jobb.bal;
+                        this.jobb.bal = this.bal;
+                        this.bal = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                }
+
+                if (this.kif.Equals("|"))
+                {
+                    if (this.bal.kif.Contains("V"))
+                    {
+                        this.kif = this.bal.kif;
+                        this.bal.kif = "|";
+                        this.bal.jobb = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                    if (this.jobb.kif.Contains("V"))
+                    {
+                        this.kif = this.jobb.kif;
+                        this.jobb.kif = "|";
+                        this.jobb.jobb = this.jobb.bal;
+                        this.jobb.bal = this.bal;
+                        this.bal = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                    if (this.bal.kif.Contains("J"))
+                    {
+                        this.kif = this.bal.kif;
+                        this.bal.kif = "|";
+                        this.bal.jobb = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                    if(this.jobb.kif.Contains("J"))
+                    {
+                        this.kif = this.jobb.kif;
+                        this.jobb.kif = "|";
+                        this.jobb.jobb = this.jobb.bal;
+                        this.jobb.bal = this.bal;
+                        this.bal = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                }
+
+                if (this.kif.Equals(">"))
+                {
+                    if (this.bal.kif.Contains("V"))
+                    {
+                        this.kif = "J" + this.bal.kif[1];
+                        this.bal.kif = ">";
+                        this.bal.jobb = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                }
+
+                if (this.kif.Equals(">"))
+                {
+                    if (this.bal.kif.Contains("J"))
+                    {
+                        this.kif = "V" + this.bal.kif[1];
+                        this.bal.kif = ">";
+                        this.bal.jobb = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
+                }
+
+                if (this.kif.Equals(">"))
+                {
+                    if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
+                    {
+                        this.kif = this.jobb.kif;
+                        this.jobb.kif = ">";
+                        this.jobb.jobb = this.jobb.bal;
+                        this.jobb.bal = this.bal;
+                        this.bal = this.jobb;
+                        this.jobb = null;
+                        this.bal.kvantorKiemel();
+                        x = 1;
+                        continue;
+                    }
                 }
             }
 
-            if (this.kif.Equals("|"))
-            {
-                if (this.bal.kif.Contains("V") || this.bal.kif.Contains("J"))
-                {
-                    this.kif = this.bal.kif;
-                    this.bal.kif = "|";
-                    this.bal.jobb = this.jobb;
-                    this.jobb = null;
-                    x = 1;
-                }
-            }
-
-            if (this.kif.Equals(">"))
-            {
-                if (this.bal.kif.Contains("V"))
-                {
-                    this.kif = "J" + this.bal.kif[1];
-                    this.bal.kif = ">";
-                    this.bal.jobb = this.jobb;
-                    this.jobb = null;
-                    x = 1;
-                }
-            }
-
-            if (this.kif.Equals(">"))
-            {
-                if (this.bal.kif.Contains("J"))
-                {
-                    this.kif = "V" + this.bal.kif[1];
-                    this.bal.kif = ">";
-                    this.bal.jobb = this.jobb;
-                    this.jobb = null;
-                    x = 1;
-                }
-            }
-
-            if (this.kif.Equals("&"))
-            {
-                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
-                {
-                    this.kif = this.jobb.kif;
-                    this.jobb.kif = "&";
-                    this.jobb.jobb = this.jobb.bal;
-                    this.jobb.bal = this.bal;
-                    this.bal = this.jobb;
-                    this.jobb = null;
-                    x = 1;
-                }
-            }            
-
-            if (this.kif.Equals("|"))
-            {
-                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
-                {
-                    this.kif = this.jobb.kif;
-                    this.jobb.kif = "|";
-                    this.jobb.jobb = this.jobb.bal;
-                    this.jobb.bal = this.bal;
-                    this.bal = this.jobb;
-                    this.jobb = null;
-                    x = 1;
-                }
-            }            
-
-            if (this.kif.Equals(">"))
-            {
-                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
-                {
-                    this.kif = this.jobb.kif;
-                    this.jobb.kif = ">";
-                    this.jobb.jobb = this.jobb.bal;
-                    this.jobb.bal = this.bal;
-                    this.bal = this.jobb;
-                    this.jobb = null;
-                    x = 1;
-                }
-            }
-
-            this.bejar(new Label());
+            /*this.bejar(new Label());
             Console.WriteLine();
-            return x;
+            return x;*/
         }
 
-        public int prenexizalo()
+        public void prenexizalo()
         {
-            int x;
             valtozokNullaz();
             kotottValtKer();
             valtozoTisztaAlak();
             demorganKvantor();
             this.bejar(new Label());
             Console.WriteLine();
-            x = kvantorKiemel();
-            return x;
+            kvantorKiemel();
         }
 
         private String zarojelLeszed(String s)
