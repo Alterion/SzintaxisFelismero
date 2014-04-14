@@ -370,20 +370,34 @@ namespace SzintaxisFelismero
 
         public void valtozoTisztaAlak()
         {
+            if (this.bal != null) this.bal.valtozoTisztaAlak();
+            if (this.jobb != null) this.jobb.valtozoTisztaAlak();
+            if (this.kif.Contains("V") || this.kif.Contains("J"))
+            {
+                if (valtozok[this.kif[1] - 97] > 1)
+                {
+                    valtozok[this.kif[1] - 97]--;
+                    this.atnevez(this.kif[1], nemhasznValt());
+                }
+             }           
+
+
             if(this.bal != null)
             {
-                if (this.bal.kif.Contains("V") || this.bal.kif.Contains("J"))
+                if ((this.bal.kif.Contains("V") || this.bal.kif.Contains("J")) && this.jobb != null)
                 {
                     this.jobb.atnevez(this.bal.kif[1], nemhasznValt());
                 }
             }
             if(this.jobb != null)
             {
-                if (this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J"))
+                if ((this.jobb.kif.Contains("V") || this.jobb.kif.Contains("J")) && this.bal != null)
                 {
                     this.bal.atnevez(this.jobb.kif[1], nemhasznValt());
                 }
             }
+            this.bejar(new Label());
+            Console.WriteLine();
             if (this.bal != null) this.bal.valtozoTisztaAlak();
             if (this.jobb != null) this.jobb.valtozoTisztaAlak();
         }
