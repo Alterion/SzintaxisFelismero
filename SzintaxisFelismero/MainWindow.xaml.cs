@@ -251,13 +251,13 @@ namespace SzintaxisFelismero
                     Console.WriteLine();
                 }
                 else knfLabel.Content = "üres";
-                if (t2 != null)
+                /*if (t2 != null)
                 {
                     t2 = t2.uresAgEltavolit();
                     t2.bejar(dnfLabel);
                     Console.WriteLine();
                 }
-                else dnfLabel.Content = "üres";                            
+                else dnfLabel.Content = "üres";       */                     
                 eredmenyLabel.Content = "Helyes formula!";                
             }
             else eredmenyLabel.Content = "Hibás formula!";
